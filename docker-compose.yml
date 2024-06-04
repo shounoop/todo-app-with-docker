@@ -1,0 +1,36 @@
+version: "1.0"  # Adjust if using a different docker-compose version
+
+services:
+  my-app:
+    build: .
+    ports:
+      - "3000:3000"  # Define any exposed ports here (e.g., 3000 for a Node.js app)
+      
+    # Define environment variables here
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: root
+      MYSQL_PASSWORD: viettel
+      MYSQL_DB: todos
+    depends_on:
+      - mysql
+
+    networks:
+      - todo-net
+  mysql:
+    image: mysql:8
+
+    # volumes are used to persist data even after the container is removed
+    volumes:
+      - todo-mysql-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: viettel
+      MYSQL_DATABASE: todos
+
+    networks:
+      - todo-net
+volumes:
+  todo-mysql-data:
+
+networks:
+  todo-net:
